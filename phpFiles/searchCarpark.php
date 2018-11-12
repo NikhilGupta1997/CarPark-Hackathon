@@ -57,6 +57,7 @@
         document.myform.cLat.value = position.coords.latitude;
         document.myform.cLon.value = position.coords.longitude;
     }
+
 </script>
 
 <body>
@@ -93,8 +94,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
     $dLat=4;
     $dLon=5;
   }
-  header("Location: carparkResult.php?cLat=$cLat&cLon=$cLon&dLat=$dLat&dLon=$dLon&useCurrLoc=$use_current_location");
-  die();  
+  echo "<script type='text/javascript'>window.top.location='carparkResult.php?cLat=$cLat&cLon=$cLon&dLat=$dLat&dLon=$dLon&useCurrLoc=$use_current_location';</script>"; exit;
+  // header("Location: carparkResult.php?cLat=$cLat&cLon=$cLon&dLat=$dLat&dLon=$dLon&useCurrLoc=$use_current_location");
+  // die();  
+
+  // $totalLink="carparkResult.php?cLat=".$cLat."&cLon=".$cLon."&dLat=".$dLat."&dLon=".$dLon."&useCurrLoc=".$use_current_location;
+  
+
 }
 else
 {
