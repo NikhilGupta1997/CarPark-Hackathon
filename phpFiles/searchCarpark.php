@@ -34,6 +34,10 @@
   </head>
 
   <style type="text/css">
+    #map {
+        height: 300px;
+        width: 50%;
+      }
     input[type=button], input[type=submit], input[type=reset] {
       background-color: #4CAF50;
       border: none;
@@ -83,7 +87,6 @@
   </style>
   <script>
     function getLocation() {
-        window.alert ("Getting location");
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(showPosition);
         } else { 
@@ -92,10 +95,8 @@
     }
 
     function showPosition(position) {
-      window.alert ("position location");
         document.myform.cLat.value = position.coords.latitude;
         document.myform.cLon.value = position.coords.longitude;
-        window.alert ("position going");
     }
   </script>
 
@@ -107,29 +108,46 @@
 
     $destination_string="";
     $vehicle_id="ayush_car";
-    $use_current_location="";
+    $vehicle_type="";
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-      $use_current_location=$_POST["use_current_location"];
+      $vehicle_type=$_POST["vehicle_type"];
       $cLat= $_POST["cLat"];
       $cLon= $_POST["cLon"];
-      if(is_null($_POST[destination_string])) {
-        $dLat= $_POST["cLat"];
-        $dLon= $_POST["cLon"];
-      }
-      else {
-        $result= pg_query($db,"SELECT * FROM table_landmarks WHERE name = '$_POST[destination_string]'" );
-        $myrow = pg_fetch_assoc($result);
-        if(is_null($myrow[latitude]) || is_null($myrow[longitude])) {
-          $dLat=$_POST["cLat"];
-          $dLon=$_POST["cLon"];
+      if(!$_POST[submit]) {
+        echo "$_POST[submit] $_POST[cLat] $_POST[dLat]";
+        if(is_null($_POST["dLat"]) || is_null($_POST["dLon"])) {
+          $dLat= $_POST["cLat"];
+          $dLon= $_POST["cLon"];
         } else {
-          $dLat=$myrow[latitude];
-          $dLon=$myrow[longitude];
+          $dLat= $_POST["dLat"];
+          $dLon= $_POST["dLon"];
         }
       }
+      else {
+        if(is_null($_POST[destination_string])) {
+          $dLat= $_POST["cLat"];
+          $dLon= $_POST["cLon"];
+        }
+        else {
+          $result= pg_query($db,"SELECT * FROM table_landmarks WHERE name = '$_POST[destination_string]'" );
+          $myrow = pg_fetch_assoc($result);
+          if(is_null($myrow[latitude]) || is_null($myrow[longitude])) {
+            $dLat=$_POST["cLat"];
+            $dLon=$_POST["cLon"];
+          } else {
+            $dLat=$myrow[latitude];
+            $dLon=$myrow[longitude];
+          }
+        }
+      }
+
+      if(is_null($dLat) || is_null($dLon)) {
+        $dLat=$_POST["cLat"];
+        $dLon=$_POST["cLon"];
+      }
       
-      echo "<script type='text/javascript'>window.top.location='carparkResult.php?cLat=$cLat&cLon=$cLon&dLat=$dLat&dLon=$dLon&useCurrLoc=$use_current_location';</script>"; exit;
+      echo "<script type='text/javascript'>window.top.location='carparkResult.php?cLat=$cLat&cLon=$cLon&dLat=$dLat&dLon=$dLon&vehicle_type=$vehicle_type';</script>"; exit;
     }
     else
     {
@@ -141,21 +159,62 @@
   <div class="content">
 
   <form name="myform" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" >
-    Select Destination: 
-    <input id="tags" class="city" type="text" name="destination_string" placeholder="Current Location" value="<?php echo $destination_string;?>">
+    Vehicle Type?
     <br><br>
-    Use Current Location? : 
-    <select name="use_current_location" value="<?php echo $use_current_location;?>">
-    <option value="yes">YES</option>
-    <option value="no">NO</option>
+    <select name="vehicle_type" value="<?php echo $vehicle_type;?>">
+    <option value="C">Car</option>
+    <option value="H">Heavy Vehicle</option>
+    <option value="M">Motorcycle</option>
+    <option value="B">Bicycle</option>
     </select>
     <br><br>
+    Select Destination: 
+    <br>
     <input type="hidden" name="cLat" value="<?php echo $cLat;?>" >
     <input type="hidden" name="cLon" value="<?php echo $cLon;?>" >
-    <input type="submit" name="submit" value="Submit">  
+    <input type="hidden" name="dLat" value="<?php echo $dLat;?>" >
+    <input type="hidden" name="dLon" value="<?php echo $dLon;?>" >
+    <input id="tags" class="city" type="text" name="destination_string" placeholder="Current Location" value="<?php echo $destination_string;?>">
+    <br><br>
+    <input type="submit" name="submit" value="Submit"> 
+    <br><br>
+    <div id="map"></div>
+    <!-- <button onclick="switchfun()">Click me</button> -->
+    <br><br>
+    <input type="submit" name="map_button" value="Set Map Destination">   
   </form>
   </div>
   </center>
+    <script>
+      // var map
+      function initMap() {
 
+        var location ={lat:1.349043, lng:103.678520};
+
+        var options = {
+        zoom:16,
+        center:location
+      }
+
+        var map = new google.maps.Map(document.getElementById('map'), options);
+
+        var marker = new google.maps.Marker({
+          position:location,
+          draggable:true,
+          map:map,
+          icon:'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
+        });
+
+        document.myform.dLat.value = location['lat'];
+        document.myform.dLon.value = location['lng'];
+
+        google.maps.event.addListener(marker, 'dragend', function (evt) {
+          document.myform.dLat.value = evt.latLng.lat().toFixed(4);
+          document.myform.dLon.value = evt.latLng.lng().toFixed(4);
+        });
+      }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD_kaLbzcZMUgIPoLIB4Fd0Y9FuorUUfk4&callback=initMap"
+    async defer></script>
   </body>
 </html>
