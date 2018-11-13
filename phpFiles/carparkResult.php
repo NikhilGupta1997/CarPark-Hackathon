@@ -41,7 +41,59 @@
     margin: 4px 2px;
     cursor: pointer;
   }
-  </style>
+.accordion {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+    transition: 0.4s;
+}
+
+.hidden_latitude
+{
+  visibility: hidden;
+}
+
+.hidden_longitude
+{
+  visibility: hidden;
+}
+
+#current_latitude_hidden
+{
+  visibility: hidden;
+}
+#current_longitude_hidden
+{
+  visibility: hidden;
+}
+#dest_latitude_hidden
+{
+  visibility: hidden;
+}
+#dest_longitude_hidden
+{
+  visibility: hidden;
+}
+
+.active, .accordion:hover {
+    background-color: #ccc; 
+}
+
+.panel {
+    height: 200px;
+    width: 100%;
+    padding: 0 18px;
+    display: none;
+    background-color: white;
+    overflow: hidden;
+}
+</style>
 
 <body>
 
@@ -138,40 +190,168 @@ array_multisort($sortArray[$orderby],SORT_ASC,$data);
 
 <center>
 <div class="jumbotron">
+<div class="table-responsive">
+
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/><link href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/css/dataTables.bootstrap.min.css" rel="stylesheet"/><div class="container"> 
+<h1>Suggested Carparks</h1>
+
+<!-- echo "<script type=\"text/javascript\">
+  
+  $(document).ready(function() {
+  $('#example').DataTable();
+});
+
+</script>"; -->
 
 
 <?php
 
-echo "<table class=\"table table-striped\">";
+echo "<p id=\"current_latitude_hidden\">$cLat</p>";
+echo "<p id=\"current_longitude_hidden\">$cLon</p>";
+echo "<p id=\"dest_latitude_hidden\">$dLat</p>";
+echo "<p id=\"dest_longitude_hidden\">$dLon</p>";
 
-echo "<tr>
-<th>Carpark_Name</th>
-<th>Capacity</th>
-<th>Occupied</th>
-<th>Zone</th>
-<th>distanceFromDestination</th>
-<th>timeToCarpark</th>
-</tr>";
 
-foreach( $data as &$row) 
+
+for ($tp=0;$tp<count($data) && $tp<5 ;$tp++) 
 {
-  echo "<tr>
-  <td><a href=\"carParkWiki.php?videoid=$row[carpark_id]\" target=\"_blank\">$row[carpark_id]</a></td>
-  <td>$row[capacity]</td>
-  <td>$row[count]</td>
-  <td>$row[zone]</td>
-  <td>$row[dDist]</td>
-  <td>$row[dTime]</td>
-  </tr>";
-    
+  $row=$data[$tp];
+  echo "<button class=\"accordion\">
+  <a href=\"carParkWiki.php?videoid=$row[carpark_id]\" target=\"_blank\">$row[carpark_id]</a>
+  \t <b>currentlyOccupied:</b>$row[count]
+  \t <b>capacity:</b>$row[capacity]
+  \t <b>charges:</b>$row[fare]
+  \t <b>timeToReachCarstop:</b>$row[cTime]
+  \t <b>distanceToYourDestinationFromCarpark:</b>$row[dDist]
+    <p class = \"hidden_latitude\">$row[latitude]</p><p class = \"hidden_longitude\">$row[longitude]</p>
+  </button>
+  <div class=\"panel\" id=\"$row[carpark_id]\">
+  
+  </div>
+
+  "; 
+
 }
 
-echo "</table>";
+
+// foreach( $data as &$row) 
+// {
+  
+// }
 
 ?>
 
 
+<script>
+var acc = document.getElementsByClassName("accordion");
+var i;
 
+for (i = 0; i < acc.length; i++) {
+    acc[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        var panel = this.nextElementSibling;
+        if (panel.style.display === "block") {
+            panel.style.display = "none";
+        } else {
+            panel.style.display = "block";
+        }
+    });
+}
+</script>
+  <script>
+      // var map
+      function initMap() 
+      {
+        var mapDropDowns = document.getElementsByClassName("panel");
+        var destination_longitude_hidden = document.getElementsByClassName("hidden_longitude");
+        var destination_latitude_hidden = document.getElementsByClassName("hidden_latitude");
+        var tz;
+        for (tz=0;tz<mapDropDowns.length;tz++)
+        {
+            var pointA = new google.maps.LatLng(document.getElementById("current_latitude_hidden").innerHTML, document.getElementById("current_longitude_hidden").innerHTML);
+            var pointB = new google.maps.LatLng(destination_latitude_hidden[tz].innerHTML, destination_longitude_hidden[tz].innerHTML);
+            var pointC = new google.maps.LatLng(document.getElementById("dest_latitude_hidden").innerHTML, document.getElementById("dest_longitude_hidden").innerHTML);
+            var options = 
+            {
+            zoom:16,
+            center:pointA
+            }
+            var map = new google.maps.Map(mapDropDowns[tz],options);
+            
+            // window.alert(destination_latitude_hidden[tz].innerHTML);
+            // window.alert(destination_latitude_hidden[tz].innerHTML);
+            directionsService = new google.maps.DirectionsService;
+            directionsDisplay = new google.maps.DirectionsRenderer({
+              map: map,
+              preserveViewport: true
+            });
+            markerA = new google.maps.Marker({
+              position: pointA,
+              title: "point A",
+              label: "A",
+              map: map
+            });
+            markerB = new google.maps.Marker({
+              position: pointB,
+              title: "point B",
+              label: "B",
+              map: map
+            });
+            markerC = new google.maps.Marker({
+              position: pointC,
+              title: "point C",
+              label: "C",
+              map: map
+            });
+
+          // get route from A to B
+          calculateAndDisplayRoute(directionsService, directionsDisplay, pointA, pointB);
+            
+          //   var marker = new google.maps.Marker({
+          //   position:location,
+          //   draggable:true,
+          //   map:map,
+          //   icon:'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
+          // });
+        }
+
+        // var map = new google.maps.Map(document.getElementById('mapcid2'), options);
+
+        
+
+        // document.myform.dLat.value = location['lat'];
+        // document.myform.dLon.value = location['lng'];
+
+        // google.maps.event.addListener(marker, 'dragend', function (evt) {
+        //   document.myform.dLat.value = evt.latLng.lat().toFixed(4);
+        //   document.myform.dLon.value = evt.latLng.lng().toFixed(4);
+        // });
+      }
+
+      function calculateAndDisplayRoute(directionsService, directionsDisplay, pointA, pointB) {
+        directionsService.route({
+          origin: pointA,
+          destination: pointB,
+          travelMode: google.maps.TravelMode.DRIVING
+        }, function(response, status) {
+          if (status == google.maps.DirectionsStatus.OK) {
+            directionsDisplay.setDirections(response);
+          } else {
+            window.alert('Directions request failed due to ' + status);
+          }
+        });
+      }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD_kaLbzcZMUgIPoLIB4Fd0Y9FuorUUfk4&callback=initMap"
+    async defer></script>
+
+
+</div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/js/jquery.dataTables.min.js">
+</script><script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/js/dataTables.bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.js"></script>
+</div>
 
 </div>
 </center>
@@ -183,7 +363,6 @@ echo "</table>";
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
 <!-- jQuery library -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
 <!-- Latest compiled JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
