@@ -31,7 +31,18 @@
     <![endif]-->
   </head>
   <style type="text/css">
-  input[type=button], input[type=submit], input[type=reset] 
+
+  .redButton
+  {
+   background-color: #FF0000;
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+  }
+  .greenButton, input[type=submit], input[type=reset] 
   {
     background-color: #4CAF50;
     border: none;
@@ -84,6 +95,8 @@
 .active, .accordion:hover {
     background-color: #ccc; 
 }
+
+
 
 .panel {
     height: 200px;
@@ -231,14 +244,29 @@ for ($tp=0;$tp<count($data) && $tp<5 ;$tp++)
   \t <b>timeToReachCarstop:</b>$row[cTime]
   \t <b>distanceToYourDestinationFromCarpark:</b>$row[dDist]
     <p class = \"hidden_latitude\">$row[latitude]</p><p class = \"hidden_longitude\">$row[longitude]</p>
-    <a href=\"https://www.google.com/maps/dir/?api=1&destination=$row[latitude], $row[longitude]&travelmode=driving&dir_action=navigate\" target=\"_blank\"><input type=button value='NavigateToCarpark!'></a>
-  </button>
-  <div class=\"panel\" id=\"$row[carpark_id]\">
+  ";
 
-  
-  </div>
+  if($row[count]>=$row[capacity])
+  {
+     echo " 
+      <input type=button class=\"redButton\" value='CarparkIsFull!'>
+      ";
+  }
+  else
+  {
+    
+  echo " 
+    <a href=\"https://www.google.com/maps/dir/?api=1&destination=$row[latitude], $row[longitude]&travelmode=driving&dir_action=navigate\" target=\"_blank\"><input type=button class=\"greenButton\" value='NavigateToCarpark!'></a>
+      ";
+  }
 
-  "; 
+  echo "
+
+    </button>
+    <div class=\"panel\" id=\"$row[carpark_id]\">
+
+    </div>
+    ";
 
 }
 
