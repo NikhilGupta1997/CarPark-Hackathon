@@ -2039,6 +2039,14 @@ input, select, textarea {
 					background: #b9d2ce;
 				}
 
+			ul.special li:focus {
+				top: -01zem;
+			}
+
+				ul.special li:focus a:before {
+					background: #B2C6C3;
+				}
+
 /* Meta */
 
 	ul.meta {
