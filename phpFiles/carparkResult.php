@@ -49,8 +49,8 @@
     width: 100%;
     border: none;
     text-align: left;
-    outline: none;
-    font-size: 15px;
+    outline: ridge;
+    font-size: 24px;
     transition: 0.4s;
 }
 
@@ -216,7 +216,9 @@ echo "<p id=\"dest_longitude_hidden\">$dLon</p>";
 for ($tp=0;$tp<count($data) && $tp<5 ;$tp++) 
 {
   $row=$data[$tp];
+  $tp_t=$tp+1;
   echo "<button class=\"accordion\">
+  <b>Suggested Parking $tp_t:</b>
   <a href=\"carParkWiki.php?videoid=$row[carpark_id]\" target=\"_blank\">$row[carpark_id]</a>
   \t <b>currentlyOccupied:</b>$row[count]
   \t <b>capacity:</b>$row[capacity]
@@ -224,8 +226,10 @@ for ($tp=0;$tp<count($data) && $tp<5 ;$tp++)
   \t <b>timeToReachCarstop:</b>$row[cTime]
   \t <b>distanceToYourDestinationFromCarpark:</b>$row[dDist]
     <p class = \"hidden_latitude\">$row[latitude]</p><p class = \"hidden_longitude\">$row[longitude]</p>
+    <a href=\"https://www.google.com/maps/dir/?api=1&destination=$row[latitude], $row[longitude]&travelmode=driving&dir_action=navigate\" target=\"_blank\"><input type=button value='NavigateToCarpark!'></a>
   </button>
   <div class=\"panel\" id=\"$row[carpark_id]\">
+
   
   </div>
 
@@ -327,6 +331,31 @@ for (i = 0; i < acc.length; i++) {
         //   document.myform.dLon.value = evt.latLng.lng().toFixed(4);
         // });
       }
+
+      function switchfun(output) 
+      {
+        // var output = document.getElementById("map");
+
+        if (!navigator.geolocation){
+        output.innerHTML = "<p>Geolocation is not supported by your browser</p>";
+        return;
+        }
+
+        function success(position) {
+        var latitude  = position.coords.latitude;
+        var longitude = position.coords.longitude;
+        }
+
+        function error() {
+        output.innerHTML = "Unable to retrieve your location";
+        }
+
+        output.innerHTML = "<p>Locating…</p>";
+
+        navigator.geolocation.getCurrentPosition(success, error);
+        window.open("https://www.google.com/maps/dir/?api=1&destination=1.347823, 103.680633&travelmode=driving&dir_action=navigate")
+        // window.open("https://maps.google.com/maps?daddr=<latitude>,<longitude>&amp;ll=");
+          }
 
       function calculateAndDisplayRoute(directionsService, directionsDisplay, pointA, pointB) {
         directionsService.route({
