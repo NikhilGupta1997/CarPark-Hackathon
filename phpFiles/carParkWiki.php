@@ -44,22 +44,51 @@ while ($row = pg_fetch_assoc($result))
     $fare = $row[fare];
     $space_type = $row[space_type];
 
-echo
-"
- <tr>
+    echo
+    "
+    <tr>
     <td>$row[vehicle_type]</td>
     <td>$row[capacity]</td>
- </tr>
-";
+    </tr>
+    ";
 }
+
 echo
+
 "
 </table>
 <div>Opening Time: $open</div>
 <div>Closing Time: $close</div>
 <div>Space Type: $space_type</div>
-<div>Fare: SGD $fare / min </div>
+<div>Fare: SGD $fare / min </div>";
 
+$result_gates= pg_query($db,"Select * from table_carpark_location where carpark_id='$carparkid'" );
+echo"
+<table>
+ <tr>
+    <td>Gate Id</td>
+    <td>Latitude</td>
+    <td>Longitude</td>
+    <td>Active Status</td>
+    <td>Zone</td>
+ </tr>
+";
+while ($row = pg_fetch_assoc($result_gates)) 
+{
+   echo
+    "
+    <tr>
+    <td>$row[gate_id]</td>
+    <td>$row[latitude]</td>
+    <td>$row[longitude]</td>
+    <td>$row[active_status]</td>
+    <td>$row[zone]</td>
+    </tr>
+    ";
+}
+
+echo"
+</table>
 </body>
 </html>
 ";
