@@ -64,10 +64,11 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
 
 function initializeUI() {
   pushButton.addEventListener('click', function() {
-    pushButton.disabled = true;
     if (isSubscribed) {
       unsubscribeUser()
+      pushButton.disabled = true;
     } else {
+      pushButton.disabled = true;
       // subscribeUser();
     }
   });

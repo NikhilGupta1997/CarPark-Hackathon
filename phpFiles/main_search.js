@@ -59,16 +59,17 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
   });
 } else {
   console.warn('Push messaging is not supported');
-  pushButton.textContent = 'Push Not Supported';
 }
 
 function initializeUI() {
   pushButton.addEventListener('click', function() {
-    pushButton.disabled = true;
+    // 
     if (isSubscribed) {
+      pushButton.disabled = true;
       // unsubscribeUser()
     } else {
       subscribeUser();
+      pushButton.disabled = true;
     }
   });
 
@@ -140,17 +141,8 @@ function updateSubscriptionOnServer(subscription) {
 
 function updateBtn() {
   if (Notification.permission === 'denied') {
-    pushButton.textContent = 'Push Messaging Blocked.';
     pushButton.disabled = true;
     updateSubscriptionOnServer(null);
     return;
   }
-
-  if (isSubscribed) {
-    pushButton.textContent = 'Disable Push Messaging';
-  } else {
-    pushButton.textContent = 'Enable Push Messaging';
-  }
-
-  pushButton.disabled = true;
 }

@@ -1988,7 +1988,7 @@ input, select, textarea {
 				background: rgba(224, 224, 224, 0.75);
 				content: '';
 				display: block;
-				height: 1px;
+				height: 10px;
 				left: 0;
 				position: absolute;
 				width: 100%;
