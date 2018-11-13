@@ -33,6 +33,7 @@
     </script>
   </head>
 
+  <body >
   <style type="text/css">
     #map {
         height: 300px;
@@ -84,6 +85,32 @@
             color: #111;
             background-color: #F1F1F1;
         }
+
+        .styled-select{
+          border: 1px solid #ccc;
+          font-size: 16px;
+          height: 34px;
+          width: 268px;
+        }
+        .black   { background-color: #000; }
+        .rounded {
+          -webkit-border-radius: 20px;
+         -moz-border-radius: 20px;
+          border-radius: 20px;}
+
+        #drop-select{
+          border: 1px solid #ccc;
+          font-size: 16px;
+          height: 34px;
+          width: 268px;
+          -webkit-border-radius: 20px;
+          -moz-border-radius: 20px;
+          border-radius: 20px;
+
+        }
+
+
+}
   </style>
   <script>
     function getLocation() {
@@ -147,7 +174,7 @@
         $dLon=$_POST["cLon"];
       }
       
-      echo "<script type='text/javascript'>window.top.location='carparkResult.php?cLat=$cLat&cLon=$cLon&dLat=$dLat&dLon=$dLon&vehicle_type=$vehicle_type';</script>"; exit;
+       echo "<script type='text/javascript'>window.top.location='carparkResult.php?cLat=$cLat&cLon=$cLon&dLat=$dLat&dLon=$dLon&vehicle_type=$vehicle_type';</script>"; exit;
     }
     else
     {
@@ -159,26 +186,26 @@
   <div class="content">
 
   <form name="myform" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" >
-    Vehicle Type?
+    <h2>Vehicle Type </h2>
+    <div>
+      <select id = "drop-select" name="vehicle_type" value="<?php echo $vehicle_type;?>">
+      <option value="C">Car</option>
+      <option value="H">Heavy Vehicle</option>
+      <option value="M">Motorcycle</option>
+      <option value="B">Bicycle</option>
+      </select>
+    </div>
     <br><br>
-    <select name="vehicle_type" value="<?php echo $vehicle_type;?>">
-    <option value="C">Car</option>
-    <option value="H">Heavy Vehicle</option>
-    <option value="M">Motorcycle</option>
-    <option value="B">Bicycle</option>
-    </select>
-    <br><br>
-    Select Destination: 
-    <br>
+    <h2>Select Destination</h2>
     <input type="hidden" name="cLat" value="<?php echo $cLat;?>" >
     <input type="hidden" name="cLon" value="<?php echo $cLon;?>" >
     <input type="hidden" name="dLat" value="<?php echo $dLat;?>" >
     <input type="hidden" name="dLon" value="<?php echo $dLon;?>" >
     <input type="hidden" name="js_sub" value="<?php echo $js_sub;?>" >
     <input id="tags" class="city" type="text" name="destination_string" placeholder="Current Location" value="<?php echo $destination_string;?>">
-    <br><br>
     <input type="submit" name="submit" value="Submit"> 
     <br><br>
+    <h2>OR </h2><br>
     <div id="map"></div>
     <!-- <button onclick="switchfun()">Click me</button> -->
     <br><br>
