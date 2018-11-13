@@ -21,7 +21,7 @@
 
 'use strict';
 
-const applicationServerPublicKey = 'BJ53-Evgjl-ZFcmMET5wpGFLvo6tJwtvpApZEJqq0neBjqOD32UY8bcfRscad95gIoTpCSEfvZVIPE560RDbCHI';
+const applicationServerPublicKey = 'BPUPUGIQ5WxlOjElHUfwb-HvlWBKTfkJ7MdhjRLsnPJmar_cfepWJxQFHjX1DCkhleLZHFYP-ko-_2fKqanX_3o';
 
 
 const pushButton = document.querySelector('.js-push-btn');
@@ -85,13 +85,16 @@ function initializeUI() {
     } else {
       console.log('User is NOT subscribed.');
     }
-
+    console.log('Trying to subscribe');
+    subscribeUser();
     updateBtn();
   });
 }
 
 function subscribeUser() {
+  console.log(applicationServerPublicKey);
   const applicationServerKey = urlB64ToUint8Array(applicationServerPublicKey);
+  console.log(applicationServerKey);
   swRegistration.pushManager.subscribe({
     userVisibleOnly: true,
     applicationServerKey: applicationServerKey
@@ -109,6 +112,7 @@ function subscribeUser() {
     console.log('Failed to subscribe the user: ', err);
     updateBtn();
   });
+  console.log('Exiting subscribe');
 }
 
 function unsubscribeUser() {
@@ -132,6 +136,7 @@ function updateSubscriptionOnServer(subscription) {
     document.querySelector('.js-subscription-details');
 
   if (subscription) {
+    console.log(JSON.stringify(subscription));
     subscriptionJson.textContent = JSON.stringify(subscription);
     subscriptionDetails.classList.add('is-invisible');
   } else {
