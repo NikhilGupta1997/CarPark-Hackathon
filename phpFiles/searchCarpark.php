@@ -114,8 +114,8 @@
       $vehicle_type=$_POST["vehicle_type"];
       $cLat= $_POST["cLat"];
       $cLon= $_POST["cLon"];
+      echo "$_POST[js_sub]";
       if(!$_POST[submit]) {
-        echo "$_POST[submit] $_POST[cLat] $_POST[dLat]";
         if(is_null($_POST["dLat"]) || is_null($_POST["dLon"])) {
           $dLat= $_POST["cLat"];
           $dLon= $_POST["cLon"];
@@ -147,7 +147,7 @@
         $dLon=$_POST["cLon"];
       }
       
-      echo "<script type='text/javascript'>window.top.location='carparkResult.php?cLat=$cLat&cLon=$cLon&dLat=$dLat&dLon=$dLon&vehicle_type=$vehicle_type';</script>"; exit;
+      // echo "<script type='text/javascript'>window.top.location='carparkResult.php?cLat=$cLat&cLon=$cLon&dLat=$dLat&dLon=$dLon&vehicle_type=$vehicle_type';</script>"; exit;
     }
     else
     {
@@ -174,6 +174,7 @@
     <input type="hidden" name="cLon" value="<?php echo $cLon;?>" >
     <input type="hidden" name="dLat" value="<?php echo $dLat;?>" >
     <input type="hidden" name="dLon" value="<?php echo $dLon;?>" >
+    <input type="hidden" name="js_sub" value="<?php echo $js_sub;?>" >
     <input id="tags" class="city" type="text" name="destination_string" placeholder="Current Location" value="<?php echo $destination_string;?>">
     <br><br>
     <input type="submit" name="submit" value="Submit"> 
@@ -216,5 +217,6 @@
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD_kaLbzcZMUgIPoLIB4Fd0Y9FuorUUfk4&callback=initMap"
     async defer></script>
+    <script src="https://code.getmdl.io/1.2.1/material.min.js"></script>
   </body>
 </html>
