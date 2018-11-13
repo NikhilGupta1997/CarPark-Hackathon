@@ -37,12 +37,13 @@
   <style type="text/css">
     #map {
         height: 300px;
-        width: 50%;
+        width: 80%;
       }
     input[type=button], input[type=submit], input[type=reset] {
       background-color: #4CAF50;
       border: none;
       color: white;
+      font-size: 20px;
       padding: 16px 32px;
       text-decoration: none;
       margin: 4px 2px;
@@ -50,6 +51,14 @@
     }
   </style>
   <style>
+
+        body {
+          background-image: url("../images/whatsapp.png");
+          background-color: #cccccc;
+          background-repeat: repeat, repeat, no-repeat;
+          background-size: auto, auto, cover;
+          z-index: 1;
+        }
         h1 {
             font-size: 20px;
             color: #111;
@@ -204,8 +213,8 @@
     <input type="hidden" name="js_sub" value="<?php echo $js_sub;?>" >
     <input id="tags" class="city" type="text" name="destination_string" placeholder="Current Location" value="<?php echo $destination_string;?>">
     <input type="submit" name="submit" value="Submit"> 
-    <br><br>
-    <h2>OR </h2><br>
+    <br>
+    <h2>OR </h2>
     <div id="map"></div>
     <!-- <button onclick="switchfun()">Click me</button> -->
     <br><br>

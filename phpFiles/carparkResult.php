@@ -99,7 +99,7 @@
 
 
 .panel {
-    height: 200px;
+    height: 300px;
     width: 100%;
     padding: 0 18px;
     display: none;
