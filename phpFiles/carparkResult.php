@@ -96,6 +96,44 @@
     background-color: #ccc; 
 }
 
+ul {
+  overflow: none;
+  list-style-type: none;
+}
+ 
+li {
+  height: 25px;
+  float: left;
+  margin-right: 0px;
+  border-right: 1px solid #aaa;
+  padding: 0 20px;
+}
+ 
+li:last-child {
+  border-right: none;
+}
+ 
+li a {
+  text-decoration: none;
+  color: #666;
+  font: 25px/1 Helvetica, Verdana, sans-serif;
+  text-transform: uppercase;
+ 
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  -ms-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+}
+ 
+li a:hover {
+  color: #111;
+}
+ 
+li.active a {
+  font-weight: bold;
+  color: #000;
+}
 
 
 .panel {
@@ -224,39 +262,42 @@ array_multisort($sortArray[$orderby],SORT_ASC,$data);
 
 <?php
 
-echo "<p id=\"current_latitude_hidden\">$cLat</p>";
-echo "<p id=\"current_longitude_hidden\">$cLon</p>";
-echo "<p id=\"dest_latitude_hidden\">$dLat</p>";
+echo "<p style=\"display:none\" id=\"current_latitude_hidden\">$cLat</p>";
+echo "<p style=\"display:none\" id=\"current_longitude_hidden\">$cLon</p>";
+echo "<p style=\"display:none\" id=\"dest_latitude_hidden\">$dLat</p>";
 echo "<p id=\"dest_longitude_hidden\">$dLon</p>";
-
-
 
 for ($tp=0;$tp<count($data) && $tp<5 ;$tp++) 
 {
   $row=$data[$tp];
   $tp_t=$tp+1;
+  if(empty($row[count])) {
+    $row[count] = 0;
+  }
   echo "<button class=\"accordion\">
   <b>Suggested Parking $tp_t:</b>
-  <a href=\"carParkWiki.php?videoid=$row[carpark_id]\" target=\"_blank\">$row[carpark_id]</a>
-  \t <b>currentlyOccupied:</b>$row[count]
-  \t <b>capacity:</b>$row[capacity]
-  \t <b>charges:</b>$row[fare]
-  \t <b>timeToReachCarstop:</b>$row[cTime]
-  \t <b>distanceToYourDestinationFromCarpark:</b>$row[dDist]
+  <a href=\"carParkWiki.php?videoid=$row[carpark_id]\" target=\"_blank\">$row[carpark_id]</a> <br><br>
+  <ul class=\"population\">
+  <li><a href=\"#\"><b>currentlyOccupied:</b>$row[count]</a></li>
+  <li><a href=\"#\"><b>capacity:</b>$row[capacity]</a></li>
+  <li><a href=\"#\"><b>charges:</b>$row[fare]</a></li>
+  <li><a href=\"#\"><b>timeToReachCarstop:</b>$row[cTime]</a></li>
+  <li><a href=\"#\"><b>distanceToYourDestinationFromCarpark:</b>$row[dDist]</a></li>
+  </ul>  
     <p class = \"hidden_latitude\">$row[latitude]</p><p class = \"hidden_longitude\">$row[longitude]</p>
   ";
 
   if($row[count]>=$row[capacity])
   {
      echo " 
-      <input type=button class=\"redButton\" value='CarparkIsFull!'>
+      <center><input type=button class=\"redButton\" value='CarparkIsFull!'></center>
       ";
   }
   else
   {
     
   echo " 
-    <a href=\"https://www.google.com/maps/dir/?api=1&destination=$row[latitude], $row[longitude]&travelmode=driving&dir_action=navigate\" target=\"_blank\"><input type=button class=\"greenButton\" value='NavigateToCarpark!'></a>
+     <center><a href=\"https://www.google.com/maps/dir/?api=1&destination=$row[latitude], $row[longitude]&travelmode=driving&dir_action=navigate\" target=\"_blank\"><input type=button class=\"greenButton\" value='NavigateToCarpark!'></a></center>
       ";
   }
 
