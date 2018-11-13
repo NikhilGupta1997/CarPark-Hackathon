@@ -42,6 +42,21 @@
     margin: 4px 2px;
     cursor: pointer;
   }
+
+  .grayButton
+  {
+   background-color: #bbb;
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+    width: 120px;
+    height: 50px;
+  }
+
+
   .greenButton, input[type=submit], input[type=reset] 
   {
     background-color: #4CAF50;
@@ -98,15 +113,25 @@
 
 ul {
   overflow: none;
-  list-style-type: none;
+  list-style-type: none; 
+  margin:0; 
+  padding: 0; 
+  text-align: center;
 }
  
 li {
   height: 25px;
-  float: left;
   margin-right: 0px;
   border-right: 1px solid #aaa;
   padding: 0 20px;
+  margin: 0 10px; 
+  display: inline;
+}
+
+.listed {
+  height: 50px;
+  margin-right: 0px;
+  border-right: 1px solid #aaa;
 }
  
 li:last-child {
@@ -266,6 +291,16 @@ echo "<p style=\"display:none\" id=\"current_latitude_hidden\">$cLat</p>";
 echo "<p style=\"display:none\" id=\"current_longitude_hidden\">$cLon</p>";
 echo "<p style=\"display:none\" id=\"dest_latitude_hidden\">$dLat</p>";
 echo "<p id=\"dest_longitude_hidden\">$dLon</p>";
+
+echo " 
+      <center>
+      <ul>
+      <li class=\"listed\"><a href=#><input type=button class=\"grayButton\" value='Back' onclick=\"history.go(-1);\"></a></li>
+      <li class=\"listed\"><a href=\"feed.html\"><input type=button class=\"grayButton\" value='Exit'></a></li>
+      </ul>
+      </center><br><br>
+      ";
+
 
 for ($tp=0;$tp<count($data) && $tp<5 ;$tp++) 
 {
