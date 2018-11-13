@@ -23,11 +23,11 @@
 
 self.addEventListener('push', function(event) {
   console.log('[Service Worker] Push Received.');
-  console.log(`[Service Worker] Push had this data: "${event.data.text()}"`);
+  console.log(`[Service Worker] Push had this data elements hehehe: "${event.data.text()}"`);
 
-  const title = 'Push Codelab';
+  const title = 'Carpark just go filled!';
   const options = {
-    body: 'Yay it works.',
+    body: 'Sorry, your preferred carpark just got filled, lets find you a new one.',
     icon: 'images/icon.png',
     badge: 'images/badge.png'
   };
@@ -46,17 +46,18 @@ self.addEventListener('push', function(event) {
 // });
 
 self.addEventListener('notificationclick', event => {
-    const rootUrl = new URL('/', location).href;
+    const rootUrl = new URL('http://localhost/carpark/carparkResult.php').href;
     event.notification.close();
+    console.log(`[URL] "${rootUrl}"`);
+    console.log(`[location] "${location}"`);
     // Enumerate windows, and call window.focus(), or open a new one.
     event.waitUntil(
       clients.matchAll().then(matchedClients => {
         for (let client of matchedClients) {
-          if (client.url === rootUrl) {
-            return client.focus();
-          }
+          console.log(`[client] "${client.url}"`);
+          return client.focus();
         }
-        return clients.openWindow("/");
+        return clients.openWindow("http://localhost/carpark/carparkResult.php");
       })
     );
 });

@@ -94,6 +94,11 @@
     overflow: hidden;
 }
 </style>
+<script type="text/javascript">
+  onload = function() {
+    onfocus = function() {location.reload(true)}
+  }
+</script>
 
 <body>
 
