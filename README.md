@@ -15,6 +15,8 @@ The University has many carparks and visitors will not know that a carpark is fu
 + Python script emulators created to simulate car park visitors.
 + Enabled push notifications on web application by deploying service workers
 
+<img src="Images/phone_screenshot.png" alt="preview" width="400"/>
+
 ## Technologies Used
 + Postgres / SQL
 + Google Map APIs / Service Workers
